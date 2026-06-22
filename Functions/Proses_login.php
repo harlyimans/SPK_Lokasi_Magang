@@ -2,15 +2,19 @@
 session_start();
 require_once "../Connection/koneksi.php";
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $username = trim($_POST['username']);
+    $email = trim($_POST['username']); // Input login tetap bernama username
     $password = $_POST['password'];
 
-    $sql = "SELECT * FROM users WHERE username = ?";
+    $sql = "SELECT * FROM users WHERE email = ?";
     $stmt = mysqli_prepare($conn, $sql);
 
-    mysqli_stmt_bind_param($stmt, "s", $username);
+    if (!$stmt) {
+        die("Query Error : " . mysqli_error($conn));
+    }
+
+    mysqli_stmt_bind_param($stmt, "s", $email);
     mysqli_stmt_execute($stmt);
 
     $result = mysqli_stmt_get_result($stmt);
@@ -22,14 +26,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $_SESSION['login'] = true;
             $_SESSION['id_user'] = $user['id_user'];
             $_SESSION['nama'] = $user['nama'];
-            $_SESSION['role'] = $user['role'];
+            $_SESSION['email'] = $user['email'];
 
             header("Location: ../View/Dashboard.php");
             exit;
         }
     }
 
-    $_SESSION['error'] = "Username atau Password salah!";
+    $_SESSION['error'] = "Email atau Password salah!";
     header("Location: ../View/Login.php");
     exit;
 }
