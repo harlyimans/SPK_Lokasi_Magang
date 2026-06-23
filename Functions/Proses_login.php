@@ -1,35 +1,44 @@
 <?php
+
 session_start();
-require_once "../Connection/koneksi.php";
+include "../Connection/Koneksi.php";
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+$email    = trim($_POST['email'] ?? '');
+$password = $_POST['password'] ?? '';
 
-    $username = trim($_POST['username']);
-    $password = $_POST['password'];
+if (empty($email) || empty($password)) {
 
-    $sql = "SELECT * FROM users WHERE username = ?";
-    $stmt = mysqli_prepare($conn, $sql);
+    $_SESSION['error'] = "Email dan Password wajib diisi.";
 
-    mysqli_stmt_bind_param($stmt, "s", $username);
-    mysqli_stmt_execute($stmt);
-
-    $result = mysqli_stmt_get_result($stmt);
-
-    if ($user = mysqli_fetch_assoc($result)) {
-
-        if (password_verify($password, $user['password'])) {
-
-            $_SESSION['login'] = true;
-            $_SESSION['id_user'] = $user['id_user'];
-            $_SESSION['nama'] = $user['nama'];
-            $_SESSION['role'] = $user['role'];
-
-            header("Location: ../View/Dashboard.php");
-            exit;
-        }
-    }
-
-    $_SESSION['error'] = "Username atau Password salah!";
     header("Location: ../View/Login.php");
     exit;
 }
+
+$email = mysqli_real_escape_string($conn, $email);
+
+$query = mysqli_query($conn, "
+SELECT *
+FROM users
+WHERE email='$email'
+");
+
+if (mysqli_num_rows($query) == 1) {
+
+    $data = mysqli_fetch_assoc($query);
+
+    if (password_verify($password, $data['password'])) {
+
+        $_SESSION['login'] = true;
+        $_SESSION['id_user'] = $data['id_user'];
+        $_SESSION['nama'] = $data['nama'];
+        $_SESSION['email'] = $data['email'];
+
+        header("Location: ../View/Dashboard.php");
+        exit;
+    }
+}
+
+$_SESSION['error'] = "Email atau Password salah.";
+
+header("Location: ../View/Login.php");
+exit;
