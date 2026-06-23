@@ -1,39 +1,38 @@
 <?php
 session_start();
-require_once "../Connection/koneksi.php";
+
+/** @var mysqli $conn */
+require_once "../Connection/Koneksi.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $email = trim($_POST['username']); // Input login tetap bernama username
+    $username = trim($_POST['username']);
     $password = $_POST['password'];
 
-    $sql = "SELECT * FROM users WHERE email = ?";
-    $stmt = mysqli_prepare($conn, $sql);
-
-    if (!$stmt) {
-        die("Query Error : " . mysqli_error($conn));
-    }
-
-    mysqli_stmt_bind_param($stmt, "s", $email);
+    $query = "SELECT * FROM users WHERE username = ?";
+    $stmt = mysqli_prepare($conn, $query);
+    mysqli_stmt_bind_param($stmt, "s", $username);
     mysqli_stmt_execute($stmt);
-
     $result = mysqli_stmt_get_result($stmt);
+    $user = mysqli_fetch_assoc($result);
 
-    if ($user = mysqli_fetch_assoc($result)) {
-
+    if ($user) {
         if (password_verify($password, $user['password'])) {
-
             $_SESSION['login'] = true;
             $_SESSION['id_user'] = $user['id_user'];
             $_SESSION['nama'] = $user['nama'];
-            $_SESSION['email'] = $user['email'];
+            $_SESSION['role'] = $user['role'];
 
-            header("Location: ../View/Dashboard.php");
+            if ($user['role'] === 'admin') {
+                header("Location: ../View/Dashboard.php");
+            } else {
+                header("Location: ../View/Dashboard_user.php");
+            }
             exit;
         }
     }
 
-    $_SESSION['error'] = "Email atau Password salah!";
+    $_SESSION['error'] = "Username atau Password salah!";
     header("Location: ../View/Login.php");
     exit;
 }

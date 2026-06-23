@@ -15,12 +15,11 @@ if (isset($_SESSION['login'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | SPK Lokasi Magang</title>
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom Layout CSS -->
+    <link rel="stylesheet" href="../assets/css/style.css">
 
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Font Awesome Local -->
+    <link rel="stylesheet" href="../assets/css/all.min.css">
 
     <style>
         body{
@@ -76,7 +75,7 @@ if (isset($_SESSION['login'])) {
                 <div class="card-body p-5">
 
                     <div class="logo mb-3">
-                        <i class="bi bi-mortarboard-fill"></i>
+                        <i class="fas fa-graduation-cap"></i>
                     </div>
 
                     <h3 class="text-center fw-bold">
@@ -128,7 +127,7 @@ if (isset($_SESSION['login'])) {
                                 <span class="input-group-text"
                                     onclick="lihatPassword()">
 
-                                    <i class="bi bi-eye" id="icon"></i>
+                                    <i class="fas fa-eye" id="icon"></i>
 
                                 </span>
 
@@ -137,7 +136,7 @@ if (isset($_SESSION['login'])) {
                         </div>
 
                         <button class="btn btn-primary w-100 btn-login">
-                            <i class="bi bi-box-arrow-in-right"></i>
+                            <i class="fas fa-sign-in-alt"></i>
                             Login
                         </button>
 
@@ -175,14 +174,14 @@ function lihatPassword(){
     if(password.type=="password"){
 
         password.type="text";
-        icon.classList.remove("bi-eye");
-        icon.classList.add("bi-eye-slash");
+        icon.classList.remove("fa-eye");
+        icon.classList.add("fa-eye-slash");
 
     }else{
 
         password.type="password";
-        icon.classList.remove("bi-eye-slash");
-        icon.classList.add("bi-eye");
+        icon.classList.remove("fa-eye-slash");
+        icon.classList.add("fa-eye");
 
     }
 

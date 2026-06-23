@@ -3,7 +3,7 @@
 $host     = "localhost";
 $username = "root";
 $password = "";
-$database = "spk_lokasi_magang";
+$database = "magang";
 
 // Membuat koneksi
 $conn = mysqli_connect($host, $username, $password, $database);
@@ -15,4 +15,3 @@ if (!$conn) {
 
 // Mengatur charset UTF-8
 mysqli_set_charset($conn, "utf8");
-?>
